@@ -5,8 +5,6 @@ const enumOrderStatus = [
     "pending", 
     "in-progress", 
     "ready", 
-    "to-pick-up", 
-    "picked-up", 
     "delivered", 
     "cancelled"
 ];
@@ -22,9 +20,9 @@ const OrderSchema = new Schema({
                 type: String,
                 required: [true, "customer accountId is required"],
             },
-            avatar: {
+            img: {
                 type: String,
-                required: [true, "customer avatar is required"],
+                required: [true, "customer img is required"],
             },
             firstName: {
                 type: String,
@@ -41,16 +39,20 @@ const OrderSchema = new Schema({
             address: {
                 type: String,
                 required: [true, "customer address is required"],
+            },
+            deliveryDateAndTime: {
+                type: String,
+                required: [true, "customer deliveryDateAndTime is required"],
             }
         },
-        laundry: {
+        station: {
             accountId: {
                 type: String,
                 required: [true, "laundry accountId is required"],
             },
-            banner: {
+            img: {
                 type: String,
-                required: [true, "laundry banner is required"],
+                required: [true, "laundry img is required"],
             },
             name: {
                 type: String,
@@ -67,14 +69,9 @@ const OrderSchema = new Schema({
         },
     },
     content: {
-        addOns: { type: Array },
-        description: {
+        item: { 
             type: String,
-            required: [true, "description is required"],
-        },
-        weight: {
-            type: String,
-            required: [true, "weight is required"],
+            required: [true, "item is required"],  
         },
         total: {
             type: String,
@@ -98,6 +95,6 @@ const OrderSchema = new Schema({
 });
 
 //VALIDATE
-OrderSchema.path('content.addOns').validate((data) => data.length >= 1, 'Length must be >= 1');
+//OrderSchema.path('content.addOns').validate((data) => data.length >= 1, 'Length must be >= 1');
 
 module.exports = Order = mongoose.model("orders", OrderSchema);

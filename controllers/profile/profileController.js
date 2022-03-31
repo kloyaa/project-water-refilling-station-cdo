@@ -20,6 +20,8 @@ const createProfile = async (req, res) => {
 const getAllProfiles = (req, res) => {
     try {
         const accountType =  req.query.accountType;
+        const visibility =  req.query.visibility;
+
         if(accountType === undefined) {
             return Profile.find()
                 .sort({ createdAt: -1 }) // filter by date
@@ -28,7 +30,7 @@ const getAllProfiles = (req, res) => {
                 .catch((err) => res.status(400).json(err));
         }
 
-        return Profile.find({ accountType })
+        return Profile.find({ accountType, visibility })
             .sort({ createdAt: -1 }) // filter by date
             .select({ _id: 0, __v: 0 }) // Do not return _id and __v
             .then((value) => res.status(200).json(value))
@@ -56,13 +58,13 @@ const getProfile = (req, res) => {
 
 const updateProfile = (req, res) => {
     try {
-        const accountId = req.params.id;
+        const { accountId, firstName, lastName } = req.body;
         Profile.findOneAndUpdate(
             { accountId },
             {  
                 $set:  {
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
+                    "name.first": firstName,
+                    "name.last": lastName,
                     "date.updatedAt": Date.now()
                 }
             }, 
@@ -77,10 +79,28 @@ const updateProfile = (req, res) => {
         console.error(error);
     }
 }
+
+const updateProfileVisibility = (req, res) => {
+    try {
+        const { accountId, visibility } = req.query;
+        Profile.findOneAndUpdate(
+            { accountId },
+            { visibility }, 
+            { new: true })
+            .then((value) => {
+                if (!value) 
+                    return res.status(400).json({ message: "accountId not found" });
+                return res.status(200).json(value);
+            })
+            .catch((err) => res.status(400).json(err));
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 const updateProfileAddress = (req, res) => {
     try {
-      const accountId = req.params.id;
-      const { name, lat, long } = req.body;
+      const { accountId, name, lat, long } = req.query;
 
       Profile.findOneAndUpdate(
         { accountId },
@@ -92,7 +112,7 @@ const updateProfileAddress = (req, res) => {
             "date.updatedAt": Date.now(),
           },
         },
-        {new: true})
+        { new: true })
         .then((value) => {
           if (!value) {
             return res.status(400).json({ message: "accountId not found" });
@@ -107,8 +127,7 @@ const updateProfileAddress = (req, res) => {
       
 const updateProfileContact = (req, res) => {
     try {
-      const accountId = req.params.id;
-      const { email, number } = req.body;
+      const { accountId, email, number } = req.query;
 
       Profile.findOneAndUpdate(
         { accountId },
@@ -119,12 +138,11 @@ const updateProfileContact = (req, res) => {
             "date.updatedAt": Date.now(),
           },
         },
-        {new: true})
+        { new: true })
         .then((value) => {
-          if (!value) {
-            return res.status(400).json({ message: "accountId not found" });
-          }
-          return res.status(200).json(value);
+            if (!value)
+                return res.status(400).json({ message: "accountId not found" });
+            return res.status(200).json(value);
         })
         .catch((err) => res.status(400).json(err));
     } catch (e) {
@@ -147,7 +165,7 @@ const deleteProfile = (req, res) => {
     }
 }
 
-const updateCustomerAvatar = async (req, res) => {
+const updateImg = async (req, res) => {
   try {
         const accountId = req.body.accountId;
         const filePath = req.file.path;
@@ -161,7 +179,7 @@ const updateCustomerAvatar = async (req, res) => {
             { accountId }, 
             {  
                 $set:  {
-                    "img.avatar": uploadedImg.url, 
+                    "img": uploadedImg.url, 
                     "date.updatedAt": Date.now()
                 }
             }, 
@@ -177,35 +195,7 @@ const updateCustomerAvatar = async (req, res) => {
   }
 
 }
-const updateLaundryBanner = async (req, res) => {
-    try {
-        const accountId = req.body.accountId;
-        const filePath = req.file.path;
-        const options = { 
-            folder: process.env.CLOUDINARY_FOLDER + "/banner", 
-            unique_filename: true 
-        };
-        const uploadedImg = await cloudinary.uploader.upload(filePath, options);
-    
-        Profile.findOneAndUpdate(
-            { accountId }, 
-            {  
-                $set:  {
-                    "img.banner": uploadedImg.url, 
-                    "date.updatedAt": Date.now()
-                }
-            }, 
-            { runValidators: true, new: true })
-            .then((value) => {
-                if (!value) 
-                    return res.status(400).json({ message: "_id not found" });
-                return res.status(200).json(value);
-            })
-            .catch((err) => res.status(400).json(err));
-    } catch (error) {
-        console.log(error);
-    }
-}
+
 
 module.exports = {
     createProfile,
@@ -213,8 +203,8 @@ module.exports = {
     getProfile,
     updateProfile,
     deleteProfile,
-    updateCustomerAvatar,
-    updateLaundryBanner,
+    updateImg,
     updateProfileContact,
-    updateProfileAddress
+    updateProfileAddress,
+    updateProfileVisibility
 }

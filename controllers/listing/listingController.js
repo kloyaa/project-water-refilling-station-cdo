@@ -13,8 +13,8 @@ const createListing = (req, res) => {
 
 const getListings = (req, res) => {
     try {
-        const accountId = req.query.accountId;
-        const availability = req.query.availability;
+        const { accountId, availability } = req.query
+        ;
         if(availability != undefined) {
             return Listing.find({ accountId, availability })
                     .sort({ _id: -1})

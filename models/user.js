@@ -7,12 +7,9 @@ const UserSchema = new Schema({
     unique: true,
     required: [true, "email is required"],
   },
-  password: {
-    type: String,
-    required: [true, "password is required"],
-  },
   hashValue: {
     type: String,
+    required: [true, "hashValue is required"],
   },
   createdAt: {
     type: Date,

@@ -10,6 +10,7 @@ const User = require("../../models/user");
 //   "Account created",
 //   "<b>Thank you for creating your account"
 // );
+
 const createUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -19,7 +20,7 @@ const createUser = async (req, res) => {
 
         await bcrypt.hash(password, 12)
             .then(async (hashValue) => {
-                new User({ email, password, hashValue })
+                new User({ email, hashValue })
                     .save()
                     .then((value) => res.status(200).json({ accountId: value._id, email, password: hashValue }))
                     .catch((err) => res.status(400).send(err));

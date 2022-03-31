@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const enumAccountType = ["customer", "laundry"];
+const enumAccountType = ["customer", "station"];
       
 const ProfileSchema = new Schema({
   accountId: {
@@ -13,32 +13,29 @@ const ProfileSchema = new Schema({
     enum: enumAccountType,
     required: [true, "accountType is required"],
   },
-  firstName: {
-    type: String,
-    required: [true, "firstName is required"],
-  },
-  lastName: {
-    type: String,
-    required: [true, "lastName is required"],
-  },
-  bio: { type: String },
-  img: {
-    avatar: { type: String},
-    banner: { type: String}
+  name: {
+    first: {
+      type: String,
+      required: [true, "firstName is required"],
+    },
+    last: {
+      type: String,
+      required: [true, "lastName is required"],
+    },
   },
   address: {
     name: {
       type: String,
-      //required: [true, "name is required"],
+      required: [true, "name is required"],
     },
     coordinates: {
       latitude: {
         type: String,
-        //required: [true, "latitude is required"],
+        required: [true, "latitude is required"],
       },
       longitude: {
         type: String,
-        // required: [true, "longitude is required"],
+        required: [true, "longitude is required"],
       },
     },
   },
@@ -52,10 +49,7 @@ const ProfileSchema = new Schema({
       //required: [true, "contactNo is required"],
     },
   },
-  verified: {
-    type: Boolean,
-    required: [true, "verified status is required"],
-  },
+  img: { type: String },
   date: {
     createdAt: {
       type: Date,
@@ -64,7 +58,23 @@ const ProfileSchema = new Schema({
     updatedAt: {
       type: Date,
     }
-  }
+  },
+  visibility: { 
+    type: Boolean,        
+    required: [true, "visibility is required"],
+  },
+  verified: {
+    type: Boolean,
+    required: [true, "verified status is required"],
+  },
+  /*  
+    * STATION PROPERTIES
+    * ALL MUST BE OPTIONAL
+    * USE ONLY IF ACCOUNT TYPE IS STATION
+  */
+  stationName: { type: String },
+  serviceHrs: { type: String },
+
 });
 
 module.exports = Profile = mongoose.model("profiles", ProfileSchema);

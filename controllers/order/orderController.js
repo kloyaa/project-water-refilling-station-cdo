@@ -3,7 +3,9 @@ const { v4: uuidv4 } = require('uuid');
 
 const createOrder = (req, res) => {
     try {
-        req.body.refNumber = uuidv4().substring(0, 7);
+        req.body.refNumber = uuidv4()
+            .substring(0, 17)
+            .toUpperCase();
         return new Order(req.body)
             .save()
             .then((value) => res.status(200).json(value))
@@ -15,9 +17,7 @@ const createOrder = (req, res) => {
 
 const getOrders = (req, res) => {
     try {
-        const accountType =  req.query.accountType;
-        const accountId =  req.query.accountId;
-        const status =  req.query.status;
+        const { accountId, accountType, status } =  req.query;
 
         if(accountType === "customer" && status !== undefined) {
             return Order.find(
@@ -30,10 +30,10 @@ const getOrders = (req, res) => {
                 .then((value) => res.status(200).json(value))
                 .catch((err) => res.status(400).json(err));
         }
-        if(accountType === "laundry" && status !== undefined) {
+        if(accountType === "station" && status !== undefined) {
             return Order.find(
                 {
-                    "header.laundry.accountId": accountId, 
+                    "header.station.accountId": accountId, 
                     status
                 })
                 .sort({ "date.createdAt": "asc" }) // filter by date
@@ -48,8 +48,7 @@ const getOrders = (req, res) => {
 }
 
 const updateOrderStatus = (req, res) => {
-    const _id =  req.query._id;
-    const status =  req.query.status;
+    const { _id, status} =  req.query;
     try {
         Order.findByIdAndUpdate(_id, 
             {  
@@ -69,6 +68,7 @@ const updateOrderStatus = (req, res) => {
         console.error(error);
     }
 }
+
 const deleteOrder = (req, res) => {
     try {
         const id = req.params.id;
