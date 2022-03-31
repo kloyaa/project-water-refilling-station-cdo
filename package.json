@@ -1,0 +1,33 @@
+{
+  "name": "nodejs-boilerplate",
+  "version": "1.0.0",
+  "description": "<h1>NodeJS</h1>  A complete backend boilerplate using node express & GraphQL",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koolamadridano/nodejs-boilerplate.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/koolamadridano/nodejs-boilerplate/issues"
+  },
+  "homepage": "https://github.com/koolamadridano/nodejs-boilerplate#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cloudinary": "^1.26.3",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.5",
+    "multer": "^1.4.3",
+    "nodemailer": "^6.6.3",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "uuid": "^8.3.2"
+  }
+}

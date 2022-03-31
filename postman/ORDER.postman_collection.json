@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "291c5ae6-22a0-4911-a505-d75ca85d43f9",
+		"name": "ORDER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CREATE ORDER",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"header\": {\r\n        \"customer\": {\r\n            \"accountId\": \"1\",\r\n            \"firstName\": \"Kolya\",\r\n            \"lastName\": \"Madridanp\",\r\n            \"contactNo\": \"09277522772\",\r\n            \"address\": \"Xavier Estates Phase 4\",\r\n            \"avatar\": \"https://avatar.io/Sx3fea2e9fe8e253fd772601\"\r\n        },\r\n        \"laundry\": {\r\n            \"accountId\": \"Sx3fea2e9fe8e253fd77260f\",\r\n            \"name\": \"Hitoria's Laundry\",\r\n            \"contactNo\": \"09277522772\",\r\n            \"address\": \"Xavier Estates Phase 4\",\r\n            \"banner\": \"https://banner.io/Sx3fea2e9fe8e253fd77260f\"\r\n        }\r\n    },\r\n    \"content\": {\r\n        \"addOns\": [\r\n            \"item 1\",\r\n            \"item 2\",\r\n            \"item 3\",\r\n            \"item 4\",\r\n            \"item 5\",\r\n            \"item 6\"\r\n        ],\r\n        \"description\": \"1 Black dress, 10 Pants and 1 Blanket\",\r\n        \"weight\": \"5 kg\",\r\n        \"total\": \"50\"\r\n    },\r\n    \"status\": \"pending\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/order",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ORDERS",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"header\": {\r\n\r\n    },\r\n    \"content\": {\r\n\r\n    },\r\n    \"status\": \"pending\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/order?accountId=Sx3fea2e9fe8e253fd77260f&accountType=laundry&status=pending",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"order"
+					],
+					"query": [
+						{
+							"key": "accountId",
+							"value": "Sx3fea2e9fe8e253fd77260f"
+						},
+						{
+							"key": "accountType",
+							"value": "laundry"
+						},
+						{
+							"key": "status",
+							"value": "pending"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE ORDER STATUS",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"header\": {\r\n\r\n    },\r\n    \"content\": {\r\n\r\n    },\r\n    \"status\": \"pending\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/order?_id=624032f5b6506487fade9fa3&status=picked-up",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"order"
+					],
+					"query": [
+						{
+							"key": "_id",
+							"value": "624032f5b6506487fade9fa3"
+						},
+						{
+							"key": "status",
+							"value": "picked-up"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "0ecc80e0-b746-471b-a9ac-29927e058a6a",
+		"name": "LISTING",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CREATE LISTING",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountId\": \"Sx3fea2e9fe8e253fd77260f\",\r\n    \"title\": \"DELETE THIS FIRST\",\r\n    \"price\": \"50\",\r\n    \"availability\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/laundry/listing",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"laundry",
+						"listing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET LISTINGS",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/laundry/listing?accountId=Sx3fea2e9fe8e253fd77260f&availability=false",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"laundry",
+						"listing"
+					],
+					"query": [
+						{
+							"key": "accountId",
+							"value": "Sx3fea2e9fe8e253fd77260f"
+						},
+						{
+							"key": "availability",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE LISTING",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/laundry/listing/624071ddbace4eaaa260bbad",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"laundry",
+						"listing",
+						"624071ddbace4eaaa260bbad"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

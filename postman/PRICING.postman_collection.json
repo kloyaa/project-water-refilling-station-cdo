@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "9e24e772-2f48-4703-8025-459022407fc0",
+		"name": "PRICING",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CREATE PRICING",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountId\": \"Sx3fea2e9fe8e253fd77260f\",\r\n    \"pricing\":  500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/laundry/pricing",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"laundry",
+						"pricing"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET PRICING",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/laundry/pricing/Sx3fea2e9fe8e253fd77260f",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"laundry",
+						"pricing",
+						"Sx3fea2e9fe8e253fd77260f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE PRICING",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/laundry/pricing/?accountId=Sx3fea2e9fe8e253fd77260f&pricing=677",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"laundry",
+						"pricing",
+						""
+					],
+					"query": [
+						{
+							"key": "accountId",
+							"value": "Sx3fea2e9fe8e253fd77260f"
+						},
+						{
+							"key": "pricing",
+							"value": "677"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

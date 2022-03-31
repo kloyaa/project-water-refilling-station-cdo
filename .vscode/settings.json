@@ -1,0 +1,15 @@
+{
+  "editor.wordWrapColumn": 300,
+  "editor.fontSize": 15,
+  "files.autoSave": "afterDelay",
+  "window.zoomLevel": -1,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.exclude": {
+    "node_modules/": true,
+    "package-lock.json": true,
+    ".gitattributes": true
+  }
+}

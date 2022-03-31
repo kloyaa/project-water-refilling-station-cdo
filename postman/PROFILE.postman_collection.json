@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "6bec813b-8037-47b7-83aa-ebfeeb20f9e1",
+		"name": "PROFILE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UPLOAD",
+			"item": [
+				{
+					"name": "UPLOAD AVATAR",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "accountId",
+									"value": "Sx3fea2e9fe8e253fd77260f",
+									"type": "text"
+								},
+								{
+									"key": "img",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api-laundryna.herokuapp.com/api/a/profile",
+							"protocol": "https",
+							"host": [
+								"api-laundryna",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"a",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPLOAD BANNER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "accountId",
+									"value": "Sx3fea2e9fe8e253fd77260f",
+									"type": "text"
+								},
+								{
+									"key": "img",
+									"type": "file",
+									"src": "/C:/Users/KOLA/Pictures/Temporary/picture_jon_snow.PNG"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api-laundryna.herokuapp.com/api/b/profile",
+							"protocol": "https",
+							"host": [
+								"api-laundryna",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"api",
+								"b",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CREATE PROFILE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountId\": \"Sx3fea2e9fe8e253fd77260f\",\r\n    \"accountType\": \"customer\",\r\n    \"firstName\": \"Kolya\",\r\n    \"lastName\": \"Madridano\",\r\n    \"verified\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/profile",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ALL PROFILES",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountId\": \"Sx3fea2e9fe8e253fd77260f\",\r\n    \"accountType\": \"customer\",\r\n    \"img\": {\r\n        \"avatar\": \"https://avatar.io/Sx3fea2e9fe8e253fd77260f\"\r\n    },\r\n    \"firstName\": \"Kolya\",\r\n    \"lastName\": \"Madridano\",\r\n    \"verified\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/profile?accountType=customer",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"profile"
+					],
+					"query": [
+						{
+							"key": "accountType",
+							"value": "customer"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET SINGLE PROFILE",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountId\": \"Sx3fea2e9fe8e253fd77260f\",\r\n    \"accountType\": \"customer\",\r\n    \"img\": {\r\n        \"avatar\": \"https://avatar.io/Sx3fea2e9fe8e253fd77260f\"\r\n    },\r\n    \"firstName\": \"Kolya\",\r\n    \"lastName\": \"Madridano\",\r\n    \"verified\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/profile/Sx3fea2e9fe8e253fd77260f",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"profile",
+						"Sx3fea2e9fe8e253fd77260f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE PROFILE",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"SxKolya\",\r\n    \"lastName\": \"SxMadridano\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/profile/Sx3fea2e9fe8e253fd77260f",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"profile",
+						"Sx3fea2e9fe8e253fd77260f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE PROFILE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"SxKolya\",\r\n    \"lastName\": \"SxMadridano\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-laundryna.herokuapp.com/api/profile/Sx3fea2e9fe8e253fd772603",
+					"protocol": "https",
+					"host": [
+						"api-laundryna",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"profile",
+						"Sx3fea2e9fe8e253fd772603"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

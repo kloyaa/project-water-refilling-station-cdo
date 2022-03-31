@@ -1,0 +1,8 @@
+CONNECTION_STRING =  mongodb+srv://dbLaundry:<password>@clusterlaundryna.kfoiv.mongodb.net/test
+CONNECTION_STRING_LOCAL = mongodb://localhost:27017/dbLaundryna
+ACCESS_TOKEN_SECRET = e78b4bb4-3c0a-4c67-ba28-d6a3543ed623
+
+CLOUDINARY_NAME = diigkcc6g
+CLOUDINARY_KEY = 927149547633154
+CLOUDINARY_SECRET = LUlMVqTeDMq9tI-Lf06gPLV3_1Y
+CLOUDINARY_FOLDER = Laundryna
