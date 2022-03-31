@@ -18,7 +18,7 @@ const app = express();
 
 try {
     mongoose
-      .connect(process.env.CONNECTION_STRING_LOCAL)
+      .connect(process.env.CONNECTION_STRING)
       .then((value) =>console.log(`SERVER IS CONNECTED TO ${value.connections[0]._connectionString}`))
       .catch(() => console.log("SERVER CANNOT CONNECT TO MONGODB"));
 
