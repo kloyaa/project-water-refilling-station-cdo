@@ -21,14 +21,7 @@ const createProfile = async (req, res) => {
 
 const getAllProfiles = (req, res) => {
     try {
-        const accountType =  req.query.accountType;
-        const visibility =  req.query.visibility;
-        
-        const d1StartDistance =  req.query.d1StartDistance;
-        const d1EndDistance =  req.query.d1EndDistance;
-        const d2StartDistance =  req.query.d2StartDistance;
-        const d2EndDistance =  req.query.d2EndDistance;
-        
+        const { accountType, visibility, latitude, longitude }  =  req.query;
 
         if(accountType === undefined) {
             return Profile.find()
@@ -55,13 +48,12 @@ const getAllProfiles = (req, res) => {
                     if (unit=="N") { dist = dist * 0.8684 }
                     return dist
                 }
-                const distanceBetween =  distance(d1StartDistance, d1EndDistance,d2StartDistance, d2EndDistance, "K").toFixed(1);
                 const newData = value.map((element, index)  => {
                     let start = element.address.coordinates.latitude;
                     let end = element.address.coordinates.longitude;
                     let data = {
                         ...element._doc,
-                        distanceBetween: distance(start, end, d2StartDistance, d2EndDistance, "K").toFixed(1)
+                        distanceBetween: distance(start, end, latitude, longitude, "K").toFixed(1)
                     }
                     return data;
                 });
