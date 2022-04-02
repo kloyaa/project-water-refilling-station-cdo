@@ -66,7 +66,7 @@ const getAllProfiles = (req, res) => {
                     let key= "distanceBetween";
                     let value = 5;
                     let data = {
-                        ...element,
+                        ...element._doc,
                         distanceBetween: distance(d1StartDistance, d1EndDistance,d2StartDistance, d2EndDistance, "K").toFixed(1)
                     }
                     return data;
