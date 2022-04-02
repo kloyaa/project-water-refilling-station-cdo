@@ -29,7 +29,12 @@ const getAllProfiles = (req, res) => {
         const d2StartDistance =  req.query.d2StartDistance;
         const d2EndDistance =  req.query.d2EndDistance;
         
-
+       console.log({
+            "point1Start":d1StartDistance,        
+            "point1End":d1EndDistance,
+            "point2Start":d2StartDistance,        
+            "point2End":d2EndDistance,
+        });
         if(accountType === undefined) {
             return Profile.find()
                 .sort({ createdAt: -1 }) // filter by date
@@ -42,19 +47,6 @@ const getAllProfiles = (req, res) => {
             .sort({ createdAt: -1 }) // filter by date
             .select({ _id: 0, __v: 0 }) // Do not return _id and __v
             .then((value) => {
-            
-               
-                var radlat1 = Math.PI * d1StartDistance/180
-                var radlat2 = Math.PI * d2StartDistance/180
-                var theta = d1EndDistance-d2EndDistance
-                var radtheta = Math.PI * theta/180
-                var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-                dist = Math.acos(dist)
-                dist = dist * 180/Math.PI
-                dist = dist * 60 * 1.1515
-                //if (unit=="N") { dist = dist * 0.8684 }
-
-                const distanceBetween =  dist * 1.609344;
                 console.log({
                     "point1Start":d1StartDistance,        
                     "point1End":d1EndDistance,
