@@ -21,7 +21,12 @@ const getAllProfiles = (req, res) => {
     try {
         const accountType =  req.query.accountType;
         const visibility =  req.query.visibility;
-
+        
+        const d1StartDistance =  req.query.d1StartDistance;
+        const d1EndDistance =  req.query.d1EndDistance;
+        const d2StartDistance =  req.query.d2StartDistance;
+        const d2EndDistance =  req.query.d2EndDistance;
+        
         if(accountType === undefined) {
             return Profile.find()
                 .sort({ createdAt: -1 }) // filter by date
@@ -33,7 +38,27 @@ const getAllProfiles = (req, res) => {
         return Profile.find({ accountType, visibility })
             .sort({ createdAt: -1 }) // filter by date
             .select({ _id: 0, __v: 0 }) // Do not return _id and __v
-            .then((value) => res.status(200).json(value))
+            .then((value) {
+                    // Converts numeric degrees to radians
+                    function toRad(v) 
+                    {
+                        return v * pi() / 180;
+                    }
+                  function distanceBetween(lat1, lon1, lat2, lon2){
+                            let R = 6371; // km
+                            let dLat = toRad(lat2-lat1);
+                            let dLon = toRad(lon2-lon1);
+                            let lat1 = toRad(lat1);
+                            let lat2 = toRad(lat2);
+
+                            let a = Math.sin(dLat/2) * sin(dLat/2) +sin(dLon/2) * sin(dLon/2) * cos(lat1) * cos(lat2); 
+                            let c = 2 * Math.atan2(sqrt(a), sqrt(1-a)); 
+                            let d = R * c;
+                            return $d;
+                    }
+                  console.log(distanceBetween(d1StartDistance,d1EndDistance,d2StartDistance,d2EndDistance).toFixed(1));
+                  return res.status(200).json(value) 
+            })
             .catch((err) => res.status(400).json(err));
     } catch (error) {
         console.error(error);
