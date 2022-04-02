@@ -57,13 +57,12 @@ const getAllProfiles = (req, res) => {
                 }
                 const distanceBetween =  distance(d1StartDistance, d1EndDistance,d2StartDistance, d2EndDistance, "K").toFixed(1);
                 const newData = value.map((element, index)  => {
-                    let key= "distanceBetween";
-                    let value = 5;
-//                     let data = {
-//                         ...element._doc,
-//                         distanceBetween: distance(...element._doc.address.coordinates.latitude, ...element._doc.address.coordinates.lonitude,d2StartDistance, d2EndDistance, "K").toFixed(1)
-//                     }
-                    console.log(element.address.coordinates.latitude, element.address.coordinates.longitude);
+                    let start = element.address.coordinates.latitude;
+                    let end = element.address.coordinates.longitude;
+                    let data = {
+                        ...element._doc,
+                        distanceBetween: distance(start, end, d2StartDistance, d2EndDistance, "K").toFixed(1)
+                    }
                     return data;
                 });
                 return res.status(200).json(newData);
