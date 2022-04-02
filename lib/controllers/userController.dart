@@ -1,5 +1,6 @@
 import 'package:app/common/pretty_print.dart';
 import 'package:app/const/url.dart';
+import 'package:app/controllers/globalController.dart';
 import 'package:app/controllers/profileController.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as http;
@@ -12,16 +13,15 @@ class UserController extends GetxController {
   RxBool registerFailed = false.obs;
   RxBool loginFailed = false.obs;
   Map userLoginData = {};
-  Map userRegistrationProfileData = {};
   Map userAvatarData = {};
 
-  Future<void> onLogin({email, password}) async {
+  Future<void> login({email, password}) async {
     try {
       final _profile = Get.put(ProfileController());
 
       loginFailed.value = false;
-      Get.toNamed("/loading");
 
+      Get.toNamed("/loading");
       final _loginResponse = await Dio().post(
         baseUrl + "/user/login",
         data: {
@@ -33,31 +33,37 @@ class UserController extends GetxController {
       userLoginData = _loginResponse.data;
       loginFailed.value = false;
 
-      prettyPrint("DATA_LOGIN", _loginResponse.data);
+      // ASSIGN
+      final _global = Get.put(GlobalController());
+      _global.registrationProperties.addAll(
+        {
+          "loginData": {
+            "accountId": _loginResponse.data["accountId"],
+            "email": email,
+            "password": password,
+          },
+        },
+      );
+      prettyPrint("LOGIN", _loginResponse.data);
 
       // GET PROFILE TYPE
       await _profile.getProfile(userLoginData["accountId"]);
-      final _accountType = _profile.profile["accountType"];
-      if (_accountType == "customer") {
-        Get.toNamed("/customer");
-      }
-      if (_accountType == "laundry") {
-        Get.toNamed("/laundry");
-      }
     } on DioError catch (e) {
       loginFailed.value = true;
       Get.back();
       if (kDebugMode) {
-        print("onLogin() ${e.response!.data}");
+        print("login() ${e.response!.data}");
       }
     }
   }
 
-  Future<void> onRegister({email, password}) async {
+  Future<void> register({email, password}) async {
     try {
-      registerFailed.value = false;
-      Get.toNamed("/loading");
+      final _global = Get.put(GlobalController());
 
+      registerFailed.value = false;
+
+      Get.toNamed("/loading");
       final _registerResponse = await Dio().post(
         baseUrl + "/user/register",
         data: {
@@ -66,77 +72,95 @@ class UserController extends GetxController {
         },
       );
 
+      // ASSIGN VALUE TO GLOBAL STATE
+      _global.registrationProperties.addAll(
+        {
+          "loginData": {
+            "accountId": _registerResponse.data["accountId"],
+            "email": email,
+            "password": password,
+          },
+        },
+      );
       registerFailed.value = false;
-      userLoginData = _registerResponse.data;
 
-      // ASSIGN FOR LOGIN
-      userRegistrationProfileData["email"] = email;
-      userRegistrationProfileData["password"] = password;
+      // REDIRECT TO NEXT STEP
+      Get.toNamed("/register-account-type");
 
-      Get.toNamed("/register-2");
-      prettyPrint("_registerResponse", _registerResponse.data);
+      prettyPrint("REGISTER", _registerResponse.data);
     } on DioError catch (e) {
       registerFailed.value = true;
       Get.back();
       if (kDebugMode) {
-        prettyPrint("_loginResponse", e.response!.data);
+        prettyPrint("register()", e.response!.data);
       }
     }
   }
 
-  void onLogout() {
+  void logout() {
+    final _global = Get.put(GlobalController());
     userLoginData.clear();
-    userRegistrationProfileData.clear();
+    _global.registrationProperties.clear();
     Get.toNamed("/login");
   }
 
-  Future<void> onCreateProfile() async {
+  Future<void> createProfile() async {
     try {
       Get.toNamed("/loading");
-      final accountId = userLoginData["accountId"];
+      final _global = Get.put(GlobalController());
+      final accountId =
+          _global.registrationProperties["loginData"]["accountId"];
       final payload = http.FormData.fromMap({
         "accountId": accountId,
         'img': await http.MultipartFile.fromFile(
-          userAvatarData["path"],
-          filename: userAvatarData["name"],
+          _global.registrationProperties["img"]["path"],
+          filename: _global.registrationProperties["img"]["name"],
           contentType: MediaType("image", "jpeg"), //important
         ),
       });
 
-      // CREATE PROFILE
-      await Dio().post(baseUrl + "/profile", data: {
-        "accountId": accountId,
-        "accountType": userRegistrationProfileData["accoutType"],
-        "firstName": userRegistrationProfileData["firstName"],
-        "lastName": userRegistrationProfileData["lastName"],
-        "verified": false
-      });
+      // REMOVE IMG DATA
+      _global.registrationProperties.remove("img");
+      prettyPrint("onCreateProfile()", _global.registrationProperties);
 
-      // UPDATE PROFILE
-      await Dio().post(baseUrl + "/a/profile", data: payload);
+      // ASSIGN VALUE OF ACCOUNT ID
+      // CEATE PROFILE
+      _global.registrationProperties["accountId"] = accountId;
+      await Dio().post(
+        baseUrl + "/profile",
+        data: {
+          ..._global.registrationProperties,
+          "visibility": true,
+          "verified": false,
+        },
+      );
 
-      // UPDATE PROFILE ADDRESS
-      await Dio().put(baseUrl + "/address/profile/$accountId", data: {
-        "name": userRegistrationProfileData["address"],
-        "lat": "0",
-        "long": "0"
-      });
-
-      // UPDATE PROFILE CONTACT
-      await Dio().put(baseUrl + "/contact/profile/$accountId", data: {
-        "number": userRegistrationProfileData["contact"],
-        "email": userLoginData["email"],
-      });
+      await Dio().put(baseUrl + "/profile/img", data: payload);
 
       // lOGIN AUTOMATICALLY AFTER REGISTRATION
-      await onLogin(
-        email: userRegistrationProfileData["email"],
-        password: userRegistrationProfileData["password"],
+      await login(
+        email: _global.registrationProperties["loginData"]["email"],
+        password: _global.registrationProperties["loginData"]["password"],
       );
+      // // UPDATE PROFILE
+
+      // // UPDATE PROFILE ADDRESS
+      // await Dio().put(baseUrl + "/address/profile/$accountId", data: {
+      //   "name": userRegistrationProfileData["address"],
+      //   "lat": "0",
+      //   "long": "0"
+      // });
+
+      // // UPDATE PROFILE CONTACT
+      // await Dio().put(baseUrl + "/contact/profile/$accountId", data: {
+      //   "number": userRegistrationProfileData["contact"],
+      //   "email": userLoginData["email"],
+      // });
+
     } on DioError catch (e) {
       Get.back();
       if (kDebugMode) {
-        prettyPrint("onCreateProfile()", e.response!.data);
+        prettyPrint("createProfile()", e.response!.data);
       }
     }
   }

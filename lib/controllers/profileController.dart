@@ -12,9 +12,18 @@ class ProfileController extends GetxController {
       final _getProfileResponse = await Dio().get(baseUrl + "/profile/$id");
       profile = _getProfileResponse.data;
 
+      final _accountType = _getProfileResponse.data["accountType"];
       prettyPrint("PROFILE", _getProfileResponse.data);
+
+      // REDIRECT
+      if (_accountType == "customer") {
+        print("CUSTOMER");
+      }
+      if (_accountType == "station") {
+        print("STATION");
+      }
     } on DioError catch (e) {
-      Get.back();
+      Get.toNamed("/register-account-type");
       if (kDebugMode) {
         prettyPrint("getProfile()", e.response!.data);
       }
