@@ -42,12 +42,6 @@ const getAllProfiles = (req, res) => {
             .sort({ createdAt: -1 }) // filter by date
             .select({ _id: 0, __v: 0 }) // Do not return _id and __v
             .then((value) => {
-                console.log({
-                    "point1Start":d1StartDistance,        
-                    "point1End":d1EndDistance,
-                    "point2Start":d2StartDistance,        
-                    "point2End":d2EndDistance,
-                });
                 function distance(lat1, lon1, lat2, lon2, unit)  {
                     var radlat1 = Math.PI * lat1/180
                     var radlat2 = Math.PI * lat2/180
@@ -65,11 +59,11 @@ const getAllProfiles = (req, res) => {
                 const newData = value.map((element, index)  => {
                     let key= "distanceBetween";
                     let value = 5;
-                    let data = {
-                        ...element._doc,
-                        distanceBetween: distance(...element._doc.address.coordinates.latitude, ...element._doc.address.coordinates.lonitude,d2StartDistance, d2EndDistance, "K").toFixed(1)
-                    }
-                    console.log(element.address.coordinates.latitude, element.address.coordinates.lonitude,d2StartDistance);
+//                     let data = {
+//                         ...element._doc,
+//                         distanceBetween: distance(...element._doc.address.coordinates.latitude, ...element._doc.address.coordinates.lonitude,d2StartDistance, d2EndDistance, "K").toFixed(1)
+//                     }
+                    console.log(element.address.coordinates.latitude, element.address.coordinates.longitude);
                     return data;
                 });
                 return res.status(200).json(newData);
