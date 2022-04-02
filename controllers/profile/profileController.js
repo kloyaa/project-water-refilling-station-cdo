@@ -62,8 +62,16 @@ const getAllProfiles = (req, res) => {
                     return dist
                 }
                 const distanceBetween =  distance(d1StartDistance, d1EndDistance,d2StartDistance, d2EndDistance, "K").toFixed(1);
-                console.log(distanceBetween);
-                return res.status(200).json(value);
+                const newData = value.map((element, index)  => {
+                    let key= "distanceBetween";
+                    let value = 5;
+                    let data = {
+                        ...element,
+                        distanceBetween: distance(d1StartDistance, d1EndDistance,d2StartDistance, d2EndDistance, "K").toFixed(1)
+                    }
+                    return data;
+                });
+                return res.status(200).json(newData);
 
             })
             .catch((err) => res.status(400).json(err));
