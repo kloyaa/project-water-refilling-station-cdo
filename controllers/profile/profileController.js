@@ -42,8 +42,8 @@ const getAllProfiles = (req, res) => {
             .sort({ createdAt: -1 }) // filter by date
             .select({ _id: 0, __v: 0 }) // Do not return _id and __v
             .then((value) => {
-                const point1 = { latitude: d1StartDistance, longitude: d1EndDistance }
-                const point2 = { latitude: d2StartDistance, longitude: d2EndDistance }
+                const point1 = { lat: d1StartDistance, lng: d1EndDistance }
+                const point2 = { lat: d2StartDistance, lng: d2EndDistance }
                 console.log(haversine(point1, point2))
                 return res.status(200).json(value) 
             })
