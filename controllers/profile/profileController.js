@@ -53,7 +53,7 @@ const getAllProfiles = (req, res) => {
                     let a = Math.sin(dLat/2) * sin(dLat/2) +sin(dLon/2) * sin(dLon/2) * cos(lat1) * cos(lat2); 
                     let c = 2 * Math.atan2(sqrt(a), sqrt(1-a)); 
                     let d = R * c;
-                    return $d;
+                    return d;
                 }
                 console.log(distanceBetween(d1StartDistance,d1EndDistance,d2StartDistance,d2EndDistance).toFixed(1));
                 return res.status(200).json(value) 
