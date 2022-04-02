@@ -1,22 +1,8 @@
 const Profile = require("../../models/profile");
 const cloudinary = require("../../services/img-upload/cloundinary");
+const haversine = require('haversine-distance')
 
-// Converts numeric degrees to radians
-function toRad(v){
-    return v * pi() / 180;
-}
-function distanceBetween(d1Sd, d1Ed, d2Sd, d2Ed){
-    let R = 6371; // km
-    let dLat = toRad(d2Sd-d1Sd);
-    let dLon = toRad(d2Ed-d1Ed);
-    let lat1 = toRad(d1Sd);
-    let lat2 = toRad(d2Sd);
 
-    let a = Math.sin(dLat/2) * sin(dLat/2) +sin(dLon/2) * sin(dLon/2) * cos(lat1) * cos(lat2); 
-    let c = 2 * Math.atan2(sqrt(a), sqrt(1-a)); 
-    let d = R * c;
-    return d;
-}
 
 const createProfile = async (req, res) => {
     try {
@@ -56,7 +42,9 @@ const getAllProfiles = (req, res) => {
             .sort({ createdAt: -1 }) // filter by date
             .select({ _id: 0, __v: 0 }) // Do not return _id and __v
             .then((value) => {
-                console.log(distanceBetween(d1StartDistance,d1EndDistance,d2StartDistance,d2EndDistance).toFixed(1));
+                const point1 = { latitude: d1StartDistance, longitude: d1EndDistance }
+                const point2 = { latitude: d2StartDistance, longitude: d2EndDistance 
+                console.log(haversine(point1, point2))
                 return res.status(200).json(value) 
             })
             .catch((err) => res.status(400).json(err));
