@@ -67,9 +67,9 @@ const getAllProfiles = (req, res) => {
                     let value = 5;
                     let data = {
                         ...element._doc,
-                        distanceBetween: distance(element._doc.address.coordinates.latitude, element._doc.address.coordinates.lonitude,d2StartDistance, d2EndDistance, "K").toFixed(1)
+                        distanceBetween: distance(...element._doc.address.coordinates.latitude, ...element._doc.address.coordinates.lonitude,d2StartDistance, d2EndDistance, "K").toFixed(1)
                     }
-                    console.log(element._doc.address.coordinates.latitude, element._doc.address.coordinates.lonitude);
+                    console.log(element.address.coordinates.latitude, element.address.coordinates.lonitude,d2StartDistance);
                     return data;
                 });
                 return res.status(200).json(newData);
