@@ -55,10 +55,13 @@ const getAllProfiles = (req, res) => {
                         return dist
                 }
 
-                const distanceBetween = distance(d1StartDistance, d1EndDistance, d2StartDistance, d2EndDistance, "K").toFixed(1);
-                console.log(req.query);
-                console.log(distanceBetween);
-                return res.status(200).json(value);
+                const distanceBetween =  distance(d1StartDistance, d1EndDistance, d2StartDistance, d2EndDistance, "K").toFixed(1);
+                if(distanceBetween != "NaN) {
+                    console.log(req.query);
+                    console.log(distanceBetween);
+                    return res.status(200).json(value);
+                }
+
             })
             .catch((err) => res.status(400).json(err));
     } catch (error) {
