@@ -43,12 +43,12 @@ const getAllProfiles = (req, res) => {
                 function toRad(v){
                     return v * pi() / 180;
                 }
-                function distanceBetween(lat1, lon1, lat2, lon2){
+                function distanceBetween(d1Sd, d1Ed, d2Sd, d2Ed){
                     let R = 6371; // km
-                    let dLat = toRad(lat2-lat1);
-                    let dLon = toRad(lon2-lon1);
-                    let lat1 = toRad(lat1);
-                    let lat2 = toRad(lat2);
+                    let dLat = toRad(d2Sd-d1Sd);
+                    let dLon = toRad(d2Ed-d1Ed);
+                    let lat1 = toRad(d1Sd);
+                    let lat2 = toRad(d2Sd);
 
                     let a = Math.sin(dLat/2) * sin(dLat/2) +sin(dLon/2) * sin(dLon/2) * cos(lat1) * cos(lat2); 
                     let c = 2 * Math.atan2(sqrt(a), sqrt(1-a)); 
