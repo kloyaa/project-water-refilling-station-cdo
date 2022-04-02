@@ -65,6 +65,8 @@ const getAllProfiles = (req, res) => {
                     }
                     return data;
                 });
+            
+                newData.sort((a, b) => parseFloat(a.distanceBetween) - parseFloat(b.distanceBetween))
                 return res.status(200).json(newData);
 
             })
