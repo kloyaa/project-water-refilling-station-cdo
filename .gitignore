@@ -6,3 +6,11 @@ node_modules
 _controllers
 _models
 _routes
+android
+ios
+lib
+build
+.dart_tool
+windows
+.flutter-plugins-dependencies
+.flutter-plugins
