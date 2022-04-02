@@ -29,6 +29,7 @@ const getAllProfiles = (req, res) => {
         const d2StartDistance =  req.query.d2StartDistance;
         const d2EndDistance =  req.query.d2EndDistance;
         
+
         if(accountType === undefined) {
             return Profile.find()
                 .sort({ createdAt: -1 }) // filter by date
@@ -54,7 +55,12 @@ const getAllProfiles = (req, res) => {
                 //if (unit=="N") { dist = dist * 0.8684 }
 
                 const distanceBetween =  dist * 1.609344;
-
+                console.log({
+                    "point1Start":d1StartDistance,        
+                    "point1End":d1EndDistance,
+                    "point2Start":d2StartDistance,        
+                    "point2End":d2EndDistance,
+                });
                 console.log(distanceBetween);
                 return res.status(200).json(value);
 
