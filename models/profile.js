@@ -16,11 +16,9 @@ const ProfileSchema = new Schema({
   name: {
     first: {
       type: String,
-      required: [true, "firstName is required"],
     },
     last: {
       type: String,
-      required: [true, "lastName is required"],
     },
   },
   address: {
