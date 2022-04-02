@@ -1,3 +1,4 @@
+import 'package:app/const/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
@@ -14,13 +15,13 @@ class _LoadingState extends State<Loading> {
     return WillPopScope(
       onWillPop: () async => false,
       child: const Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: kPrimary,
         body: Center(
           child: SizedBox(
             height: 35.0,
             child: LoadingIndicator(
-              indicatorType: Indicator.ballScaleMultiple,
-              colors: [],
+              indicatorType: Indicator.ballSpinFadeLoader,
+              colors: [kLight],
               strokeWidth: 1,
             ),
           ),

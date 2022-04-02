@@ -1,4 +1,5 @@
 import 'package:app/common/radius.dart';
+import 'package:app/const/colors.dart';
 import 'package:flutter/material.dart';
 
 TextField inputTextField(
@@ -12,35 +13,39 @@ TextField inputTextField(
     hasError}) {
   return TextField(
     style: textFieldStyle.copyWith(
-      color: hasError ? Colors.red : textFieldStyle.color,
+      color: hasError ? Colors.redAccent : textFieldStyle.color,
+      fontWeight: FontWeight.bold,
     ),
     controller: controller,
     focusNode: focusNode,
     obscureText: obscureText ?? false,
     decoration: InputDecoration(
+      contentPadding: const EdgeInsets.all(25.0),
       filled: true,
       fillColor: color,
       floatingLabelBehavior: FloatingLabelBehavior.auto,
       labelText: labelText,
-      focusedBorder: OutlineInputBorder(
+      focusedBorder: const OutlineInputBorder(
         borderRadius: kDefaultRadius,
         borderSide: BorderSide(
-          color: hasError ? Colors.red : Colors.transparent,
+          color: Colors.transparent,
           width: 0.8,
         ),
       ),
-      enabledBorder: OutlineInputBorder(
+      enabledBorder: const OutlineInputBorder(
         borderRadius: kDefaultRadius,
         borderSide: BorderSide(
-          color: hasError ? Colors.red : Colors.transparent,
+          color: Colors.transparent,
           width: 0.8,
         ),
       ),
       floatingLabelStyle: textFieldStyle.copyWith(
-        color: hasError ? Colors.red : textFieldStyle.color,
+        color: hasError ? Colors.redAccent : textFieldStyle.color,
+        height: 5,
+        fontWeight: FontWeight.bold,
       ),
       hintStyle: textFieldStyle.copyWith(
-        color: hasError ? Colors.red : textFieldStyle.color,
+        color: hasError ? Colors.redAccent : kPrimary,
       ),
     ),
   );
@@ -57,20 +62,22 @@ TextField inputNumberTextField({
 }) {
   return TextField(
     style: textFieldStyle.copyWith(
-      color: hasError ? Colors.red : textFieldStyle.color,
+      color: hasError ? Colors.redAccent : textFieldStyle.color,
+      fontWeight: FontWeight.bold,
     ),
     controller: controller,
     focusNode: focusNode,
     keyboardType: TextInputType.number,
     decoration: InputDecoration(
+      contentPadding: const EdgeInsets.all(25.0),
       filled: true,
       fillColor: color,
       floatingLabelBehavior: FloatingLabelBehavior.auto,
       labelText: labelText,
-      focusedBorder: OutlineInputBorder(
+      focusedBorder: const OutlineInputBorder(
         borderRadius: kDefaultRadius,
         borderSide: BorderSide(
-          color: hasError ? Colors.red : Colors.transparent,
+          color: Colors.transparent,
           width: 0.8,
         ),
       ),
@@ -82,10 +89,12 @@ TextField inputNumberTextField({
         ),
       ),
       floatingLabelStyle: textFieldStyle.copyWith(
-        color: hasError ? Colors.red : textFieldStyle.color,
+        color: hasError ? Colors.redAccent : textFieldStyle.color,
+        height: 5,
+        fontWeight: FontWeight.bold,
       ),
       hintStyle: textFieldStyle.copyWith(
-        color: hasError ? Colors.red : textFieldStyle.color,
+        color: hasError ? Colors.redAccent : kPrimary,
       ),
     ),
   );
@@ -102,23 +111,24 @@ TextField inputTextArea({
 }) {
   return TextField(
     style: textFieldStyle.copyWith(
-      color: hasError ? Colors.red : textFieldStyle.color,
+      color: hasError ? Colors.redAccent : textFieldStyle.color,
+      fontWeight: FontWeight.bold,
     ),
     controller: controller,
     focusNode: focusNode,
-    maxLines: 5,
-    maxLength: 255,
+    maxLines: 3,
     keyboardType: TextInputType.multiline,
     decoration: InputDecoration(
+      contentPadding: const EdgeInsets.all(25.0),
       filled: true,
       fillColor: color,
       floatingLabelBehavior: FloatingLabelBehavior.auto,
       alignLabelWithHint: true,
       labelText: labelText,
-      focusedBorder: OutlineInputBorder(
+      focusedBorder: const OutlineInputBorder(
         borderRadius: kDefaultRadius,
         borderSide: BorderSide(
-          color: hasError ? Colors.red : Colors.transparent,
+          color: Colors.transparent,
           width: 0.8,
         ),
       ),
@@ -130,10 +140,12 @@ TextField inputTextArea({
         ),
       ),
       floatingLabelStyle: textFieldStyle.copyWith(
-        color: hasError ? Colors.red : textFieldStyle.color,
+        color: hasError ? Colors.redAccent : textFieldStyle.color,
+        height: 5,
+        fontWeight: FontWeight.bold,
       ),
       hintStyle: textFieldStyle.copyWith(
-        color: hasError ? Colors.red : textFieldStyle.color,
+        color: hasError ? Colors.redAccent : kPrimary,
       ),
     ),
   );
