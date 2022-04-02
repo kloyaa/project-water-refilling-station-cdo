@@ -17,7 +17,7 @@ class ProfileController extends GetxController {
 
       // REDIRECT
       if (_accountType == "customer") {
-        print("CUSTOMER");
+        Get.toNamed("/customer");
       }
       if (_accountType == "station") {
         print("STATION");
@@ -35,7 +35,7 @@ class ProfileController extends GetxController {
       final getWaterRefillingStations = await Dio().get(
         baseUrl + "/profile",
         queryParameters: {
-          "accountType": "stations",
+          "accountType": "station",
           "visibility": true,
         },
       );

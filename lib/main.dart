@@ -4,6 +4,7 @@ import 'package:app/screens/account/registration/account.dart';
 import 'package:app/screens/account/registration/accountPicture.dart';
 import 'package:app/screens/account/registration/accountProfile.dart';
 import 'package:app/screens/account/registration/accountType.dart';
+import 'package:app/screens/customer/main.dart';
 import 'package:app/screens/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,22 +39,30 @@ class MyApp extends StatelessWidget {
           page: () => const Login(),
         ),
         GetPage(
-          name: "/register",
-          page: () => const RegisterAccount(),
+          name: "/customer",
+          page: () => const NearbyWaterRefillingStations(),
         ),
-        GetPage(
-          name: "/register-account-type",
-          page: () => const RegisterAccountType(),
-        ),
-        GetPage(
-          name: "/register-account-profile",
-          page: () => const RegisterAccountProfile(),
-        ),
-        GetPage(
-          name: "/register-account-picture",
-          page: () => const RegisterAccountPicture(),
-        ),
+        ...registration,
       ],
     );
   }
 }
+
+final List<GetPage<dynamic>> registration = [
+  GetPage(
+    name: "/register",
+    page: () => const RegisterAccount(),
+  ),
+  GetPage(
+    name: "/register-account-type",
+    page: () => const RegisterAccountType(),
+  ),
+  GetPage(
+    name: "/register-account-profile",
+    page: () => const RegisterAccountProfile(),
+  ),
+  GetPage(
+    name: "/register-account-picture",
+    page: () => const RegisterAccountPicture(),
+  )
+];
