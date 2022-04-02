@@ -42,10 +42,11 @@ const getAllProfiles = (req, res) => {
             .sort({ createdAt: -1 }) // filter by date
             .select({ _id: 0, __v: 0 }) // Do not return _id and __v
             .then((value) => {
-                const point1 = { lat: d1StartDistance, lng: d1EndDistance }
-                const point2 = { lat: d2StartDistance, lng: d2EndDistance }
-                console.log(haversine(point1, point2))
-                return res.status(200).json(value) 
+                const point1 = { lat: d1StartDistance, lng: d1EndDistance };
+                const point2 = { lat: d2StartDistance, lng: d2EndDistance };
+                console.log(req.query);
+                console.log(haversine(point1, point2));
+                return res.status(200).json(value);
             })
             .catch((err) => res.status(400).json(err));
     } catch (error) {
