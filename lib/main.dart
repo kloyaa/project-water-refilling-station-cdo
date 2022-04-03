@@ -5,7 +5,11 @@ import 'package:app/screens/account/registration/accountPicture.dart';
 import 'package:app/screens/account/registration/accountProfile.dart';
 import 'package:app/screens/account/registration/accountType.dart';
 import 'package:app/screens/customer/main.dart';
+import 'package:app/screens/customer/sub/my_orders.dart';
+import 'package:app/screens/stations/sub/create_listing.dart';
 import 'package:app/screens/loading.dart';
+import 'package:app/screens/stations/main.dart';
+import 'package:app/screens/stations/sub/created_listings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,15 +42,39 @@ class MyApp extends StatelessWidget {
           name: "/login",
           page: () => const Login(),
         ),
-        GetPage(
-          name: "/customer",
-          page: () => const NearbyWaterRefillingStations(),
-        ),
+        ...customer,
+        ...station,
         ...registration,
       ],
     );
   }
 }
+
+final List<GetPage<dynamic>> customer = [
+  GetPage(
+    name: "/customer",
+    page: () => const NearbyWaterRefillingStations(),
+  ),
+  GetPage(
+    name: "/customer-orders",
+    page: () => const MyOrders(),
+  ),
+];
+
+final List<GetPage<dynamic>> station = [
+  GetPage(
+    name: "/station-customer-orders",
+    page: () => const CustomerOrders(),
+  ),
+  GetPage(
+    name: "/station-create-listings",
+    page: () => const CreateListing(),
+  ),
+  GetPage(
+    name: "/station-listings",
+    page: () => const CreatedListings(),
+  ),
+];
 
 final List<GetPage<dynamic>> registration = [
   GetPage(

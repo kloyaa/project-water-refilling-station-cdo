@@ -1,14 +1,16 @@
+import 'package:app/common/pretty_print.dart';
 import 'package:app/common/radius.dart';
 import 'package:app/const/colors.dart';
 import 'package:app/controllers/globalController.dart';
 import 'package:app/controllers/profileController.dart';
 import 'package:app/controllers/userController.dart';
+import 'package:app/screens/customer/sub/preview_station.dart';
 import 'package:app/widget/snapshot.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 class NearbyWaterRefillingStations extends StatefulWidget {
   const NearbyWaterRefillingStations({Key? key}) : super(key: key);
@@ -36,9 +38,10 @@ class _NearbyWaterRefillingStationsState
     });
   }
 
-  void onNavigateToPreviewLaundry(data) {
-    // _laundry.selectedLaundry = data;
-    Get.toNamed("/preview-laundry");
+  void selectStation(data) {
+    _global.selectedStation = data;
+
+    Get.to(() => const PreviewStation());
   }
 
   @override
@@ -76,7 +79,7 @@ class _NearbyWaterRefillingStationsState
                 onPressed: () => _scaffoldKey.currentState!.openDrawer(),
                 splashRadius: 20.0,
                 icon: const Icon(
-                  AntDesign.menufold,
+                  AntDesign.ellipsis1,
                   color: Colors.white,
                 ),
               ),
@@ -114,7 +117,7 @@ class _NearbyWaterRefillingStationsState
                 ),
               ),
               ListTile(
-                onTap: () {},
+                onTap: () => Get.toNamed("/customer-orders"),
                 isThreeLine: true,
                 leading: const Icon(
                   MaterialCommunityIcons.receipt,
@@ -186,7 +189,7 @@ class _NearbyWaterRefillingStationsState
                       right: 20.0,
                     ),
                     child: ListTile(
-                      onTap: () {},
+                      onTap: () => selectStation(snapshot.data[index]),
                       contentPadding: const EdgeInsets.all(20.0),
                       tileColor: Colors.white,
                       shape: const RoundedRectangleBorder(
@@ -194,8 +197,11 @@ class _NearbyWaterRefillingStationsState
                       ),
                       leading: Hero(
                         tag: snapshot.data[index]["accountId"],
-                        child: Image.network(
-                          snapshot.data[index]["img"],
+                        child: CachedNetworkImage(
+                          imageUrl: snapshot.data[index]["img"],
+                          placeholder: (context, url) => Container(
+                            color: kLight,
+                          ),
                           fit: BoxFit.cover,
                           width: 60,
                           height: 60,
@@ -209,13 +215,42 @@ class _NearbyWaterRefillingStationsState
                           fontSize: 17.0,
                         ),
                       ),
-                      subtitle: Text(
-                        snapshot.data[index]["address"]["name"],
-                        style: GoogleFonts.roboto(
-                          color: kPrimary,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 13.0,
-                        ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            snapshot.data[index]["address"]["name"],
+                            style: GoogleFonts.roboto(
+                              color: kPrimary,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.0,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Fontisto.map_marker_alt,
+                                  color: kPrimary,
+                                  size: 12.0,
+                                ),
+                                const SizedBox(width: 5.0),
+                                Text(
+                                  "${snapshot.data[index]["distanceBetween"]}km",
+                                  style: GoogleFonts.roboto(
+                                    color: kPrimary,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 13.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );

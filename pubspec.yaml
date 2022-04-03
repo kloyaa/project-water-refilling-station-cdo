@@ -37,6 +37,8 @@ dependencies:
   geocoding: ^2.0.2
   latlong2: ^0.8.1
   
+  timelines: ^0.1.0
+  cached_network_image: ^3.2.0
   bottom_picker: ^1.7.0
   cupertino_icons: ^1.0.2
   expandable: ^5.0.1
