@@ -17,31 +17,38 @@ const createOrder = (req, res) => {
 
 const getOrders = (req, res) => {
     try {
-        const { accountId, accountType, status } =  req.query;
+            const { accountId, accountType, status } =  req.query;
 
-        if(accountType === "customer" && status !== undefined) {
-            return Order.find(
-                {
-                    "header.customer.accountId": accountId, 
-                    status
-                })
-                .sort({ "date.createdAt": "desc" }) // filter by date
-                .select({ __v: 0 }) // Do not return _id and __v
-                .then((value) => res.status(200).json(value))
-                .catch((err) => res.status(400).json(err));
-        }
-        if(accountType === "station" && status !== undefined) {
-            return Order.find(
-                {
-                    "header.station.accountId": accountId, 
-                    status
-                })
-                .sort({ "date.createdAt": "asc" }) // filter by date
-                .select({ __v: 0 }) // Do not return _id and __v
-                .then((value) => res.status(200).json(value))
-                .catch((err) => res.status(400).json(err));
-        }
-        return res.status(200).json([]); 
+            if(accountType === "customer" && status !== undefined) {
+                return Order.find(
+                    {
+                        "header.customer.accountId": accountId, 
+                        status
+                    })
+                    .sort({ "date.createdAt": "desc" }) // filter by date
+                    .select({ __v: 0 }) // Do not return _id and __v
+                    .then((value) => res.status(200).json(value))
+                    .catch((err) => res.status(400).json(err));
+            }
+            if(accountType === "station" && status !== undefined) {
+                return Order.find(
+                    {
+                        "header.station.accountId": accountId, 
+                        status
+                    })
+                    .sort({ "date.createdAt": "asc" }) // filter by date
+                    .select({ __v: 0 }) // Do not return _id and __v
+                    .then((value) => res.status(200).json(value))
+                    .catch((err) => res.status(400).json(err));
+            }
+           return Order.find(
+                    { "header.customer.accountId": accountId,
+                      status: { "$ne": 'ready' }
+                    })
+                    .sort({ "date.createdAt": "desc" }) // filter by date
+                    .select({ __v: 0 }) // Do not return _id and __v
+                    .then((value) => res.status(200).json(value))
+                    .catch((err) => res.status(400).json(err)); 
     } catch (error) {
         console.error(error);
     }
