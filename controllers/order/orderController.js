@@ -43,7 +43,7 @@ const getOrders = (req, res) => {
             }
            return Order.find(
                     { "header.customer.accountId": accountId,
-                      status: { "$ne": 'ready' }
+                      status: { "$ne": 'delivered' }
                     })
                     .sort({ "date.createdAt": "desc" }) // filter by date
                     .select({ __v: 0 }) // Do not return _id and __v
