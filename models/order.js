@@ -72,6 +72,10 @@ const OrderSchema = new Schema({
         item: { 
             type: String,
             required: [true, "item is required"],  
+        }, 
+        qty: {
+            type: String,
+            required: [true, "qty is required"],
         },
         total: {
             type: String,
