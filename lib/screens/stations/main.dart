@@ -1,9 +1,14 @@
 import 'package:app/common/pretty_print.dart';
+import 'package:app/common/radius.dart';
 import 'package:app/const/colors.dart';
 import 'package:app/controllers/globalController.dart';
 import 'package:app/controllers/orderController.dart';
 import 'package:app/controllers/profileController.dart';
 import 'package:app/controllers/userController.dart';
+import 'package:app/screens/stations/sub/orders.dart';
+import 'package:app/screens/stations/sub/preview_order.dart';
+import 'package:app/screens/ticket/verification.dart';
+import 'package:app/screens/ticket/verification_station.dart';
 import 'package:app/widget/snapshot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -30,10 +35,10 @@ class _CustomerOrdersState extends State<CustomerOrders> {
   late Future<dynamic> _orders;
 
   void selectCustomerOrder(data) {
-    _global.selectedOrder = data;
+    _global.selectedCustomerOrder = data;
 
-    // Get.to(const PreviewStation());
-    prettyPrint("SELECTED_ORDER", _global.selectedOrder);
+    Get.to(() => const PreviewCustomerOrder());
+    prettyPrint("SELECTED_ORDER", _global.selectedCustomerOrder);
   }
 
   Future<void> refresh() async {
@@ -46,11 +51,14 @@ class _CustomerOrdersState extends State<CustomerOrders> {
     });
   }
 
-  Future<void> delete(id) async {
+  Future<void> cancelOrder({id, status}) async {
     setState(() {
       _toDeleteId = id;
     });
-    //await _order.deleteOrder(id);
+    await _order.updateOrderStatus(
+      id: id,
+      status: status,
+    );
     refresh();
   }
 
@@ -73,10 +81,10 @@ class _CustomerOrdersState extends State<CustomerOrders> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => true,
+      onWillPop: () async => false,
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Colors.white,
+        backgroundColor: kLight,
         appBar: AppBar(
           backgroundColor: kPrimary,
           leading: const SizedBox(),
@@ -92,7 +100,13 @@ class _CustomerOrdersState extends State<CustomerOrders> {
             Container(
               margin: const EdgeInsets.only(right: 15.0),
               child: IconButton(
-                onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+                onPressed: () {
+                  if (_profile.profile["verified"] == false) {
+                    Get.to(() => const VerificationStation());
+                    return;
+                  }
+                  _scaffoldKey.currentState!.openDrawer();
+                },
                 splashRadius: 20.0,
                 icon: const Icon(
                   AntDesign.ellipsis1,
@@ -164,7 +178,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
                 ),
               ),
               ListTile(
-                onTap: () {},
+                onTap: () => Get.to(() => const Orders()),
                 isThreeLine: true,
                 leading: const Icon(
                   MaterialCommunityIcons.washing_machine,
@@ -178,7 +192,7 @@ class _CustomerOrdersState extends State<CustomerOrders> {
                   ),
                 ),
                 subtitle: Text(
-                  "View Customer Laundry \nOrders",
+                  "View Customer \nOrders",
                   style: GoogleFonts.roboto(
                     color: kPrimary.withOpacity(0.5),
                     fontSize: 12.0,
@@ -229,87 +243,91 @@ class _CustomerOrdersState extends State<CustomerOrders> {
                 child: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () => selectCustomerOrder(
-                        snapshot.data[index],
+                    final _fisrstName =
+                        snapshot.data[index]["header"]["customer"]["firstName"];
+                    final _lastName =
+                        snapshot.data[index]["header"]["customer"]["lastName"];
+                    return Container(
+                      margin: EdgeInsets.only(
+                        top: index == 0 ? 40 : 10.0,
+                        left: 20.0,
+                        right: 20.0,
                       ),
-                      contentPadding: EdgeInsets.only(
-                        top: index == 0 ? 40.0 : 15,
-                        left: 30.0,
-                        right: 30.0,
-                        bottom: 15.0,
-                      ),
-                      leading: CircleAvatar(
-                        backgroundColor: kPrimary,
-                        backgroundImage: NetworkImage(
-                          snapshot.data[index]["header"]["customer"]["avatar"],
+                      child: ListTile(
+                        onTap: () => selectCustomerOrder(
+                          snapshot.data[index],
                         ),
-                        radius: 30.0,
-                      ),
-                      trailing: _toDeleteId == snapshot.data[index]["_id"]
-                          ? const SizedBox(
-                              height: 25.0,
-                              width: 25.0,
-                              child: CircularProgressIndicator(
-                                color: Colors.red,
-                                strokeWidth: 1.5,
-                              ),
-                            )
-                          : GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () => delete(
-                                snapshot.data[index]["_id"],
-                              ),
-                              child: const Icon(
-                                AntDesign.close,
-                                color: Colors.red,
-                              ),
+                        contentPadding: const EdgeInsets.all(20.0),
+                        tileColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: kDefaultRadius,
+                        ),
+                        leading: Hero(
+                          tag: snapshot.data[index]["refNumber"],
+                          child: CircleAvatar(
+                            backgroundColor: kPrimary,
+                            backgroundImage: NetworkImage(
+                              snapshot.data[index]["header"]["customer"]["img"],
                             ),
-                      title: Container(
-                        margin: const EdgeInsets.only(top: 13.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              snapshot.data[index]["header"]["customer"]
-                                  ["firstName"],
-                              style: GoogleFonts.roboto(
-                                color: kPrimary,
-                                fontWeight: FontWeight.w500,
+                            radius: 30.0,
+                          ),
+                        ),
+                        trailing: _toDeleteId == snapshot.data[index]["_id"]
+                            ? const SizedBox(
+                                height: 25.0,
+                                width: 25.0,
+                                child: CircularProgressIndicator(
+                                  color: Colors.red,
+                                  strokeWidth: 1.5,
+                                ),
+                              )
+                            : GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => cancelOrder(
+                                  id: snapshot.data[index]["_id"],
+                                  status: "cancelled",
+                                ),
+                                child: const Icon(
+                                  AntDesign.close,
+                                  color: Colors.red,
+                                ),
                               ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 10.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    MaterialCommunityIcons.truck_delivery,
-                                    color: kPrimary.withOpacity(0.8),
-                                    size: 15,
+                        title: Container(
+                          margin: const EdgeInsets.only(top: 13.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _fisrstName + ", " + _lastName,
+                                style: GoogleFonts.chivo(
+                                  color: kPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 10.0),
+                                child: Text(
+                                  "DELIVERY ADDRESS",
+                                  style: GoogleFonts.roboto(
+                                    color: kPrimary,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12.0,
                                   ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    "DELIVERY ADDRESS",
-                                    style: GoogleFonts.roboto(
-                                      color: kPrimary.withOpacity(0.8),
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12.0,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                            Text(
-                              snapshot.data[index]["header"]["customer"]
-                                  ["address"],
-                              style: GoogleFonts.roboto(
-                                color: kPrimary.withOpacity(0.5),
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.0,
+                              Text(
+                                snapshot.data[index]["header"]["customer"]
+                                    ["address"],
+                                style: GoogleFonts.roboto(
+                                  color: kPrimary,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 10.0,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     );

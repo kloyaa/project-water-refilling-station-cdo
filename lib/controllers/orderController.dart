@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 class OrderController extends GetxController {
   Future<void> createOrder(order) async {
     try {
-      Get.toNamed("/loading");
       await Dio().post(baseUrl + "/order", data: order);
       Get.toNamed("/customer");
     } on DioError catch (e) {
@@ -20,7 +19,7 @@ class OrderController extends GetxController {
 
   Future<dynamic> getOrders({
     required accountId,
-    required status,
+    status,
     required accountType,
   }) async {
     try {
@@ -29,6 +28,7 @@ class OrderController extends GetxController {
         queryParameters: {
           "accountId": accountId,
           "accountType": accountType,
+          "status": status,
         },
       );
 
@@ -42,6 +42,7 @@ class OrderController extends GetxController {
   }
 
   Future<void> updateOrderStatus({id, status}) async {
+    print({id, status});
     await Dio().put(baseUrl + "/order", queryParameters: {
       "_id": id,
       "status": status,

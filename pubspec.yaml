@@ -36,7 +36,8 @@ dependencies:
   location: ^4.3.0
   geocoding: ^2.0.2
   latlong2: ^0.8.1
-  
+  qr_flutter: ^4.0.0
+  qr_code_scanner: ^0.7.0
   timelines: ^0.1.0
   cached_network_image: ^3.2.0
   bottom_picker: ^1.7.0

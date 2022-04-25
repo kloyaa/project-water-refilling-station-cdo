@@ -27,22 +27,15 @@ class _PreviewStationState extends State<PreviewStation> {
   final _listings = Get.put(ListingsController());
   final _order = Get.put(OrderController());
 
-  late TextEditingController _descriptionController;
-  late FocusNode _descriptionFocus;
-
   late Future<dynamic> _stationListings;
-
-  String selectedItemId = "";
   Map selectedItem = {};
+  String selectedItemId = "";
   int selectedItemQty = 1;
   int total = 0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // INITIALIZE CONTROLLERS
-    _descriptionController = TextEditingController();
-    _descriptionFocus = FocusNode();
 
     // INITIALIZE VARIABLES
     _stationListings = _listings.getListings();
@@ -60,15 +53,6 @@ class _PreviewStationState extends State<PreviewStation> {
     } catch (e) {
       print(e);
     }
-  }
-
-  Future<void> createOrder() async {
-    final _description = _descriptionController.text.trim();
-    if (_description.isEmpty) {
-      return _descriptionFocus.requestFocus();
-    }
-    Map data = {};
-    //await _order.createOrder(data);
   }
 
   Future<void> placeOrder() async {
@@ -93,6 +77,9 @@ class _PreviewStationState extends State<PreviewStation> {
           color: kPrimary,
         ),
         minDateTime: DateTime.now(),
+        displayButtonIcon: false,
+        buttonText: "CONFIRM ORDER",
+        buttonTextStyle: GoogleFonts.roboto(color: kLight),
         onSubmit: (date) {
           _order.createOrder({
             "header": {

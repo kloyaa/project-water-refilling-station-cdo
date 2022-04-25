@@ -5,6 +5,7 @@ import 'package:app/screens/account/registration/accountPicture.dart';
 import 'package:app/screens/account/registration/accountProfile.dart';
 import 'package:app/screens/account/registration/accountType.dart';
 import 'package:app/screens/customer/main.dart';
+import 'package:app/screens/customer/sub/my_completed_orders.dart';
 import 'package:app/screens/customer/sub/my_orders.dart';
 import 'package:app/screens/stations/sub/create_listing.dart';
 import 'package:app/screens/loading.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); //all widgets are rendered here
   runApp(const MyApp());
 }
 
@@ -59,6 +61,10 @@ final List<GetPage<dynamic>> customer = [
     name: "/customer-orders",
     page: () => const MyOrders(),
   ),
+  GetPage(
+    name: "/customer-completed-orders",
+    page: () => const MyCompletedOrders(),
+  ),
 ];
 
 final List<GetPage<dynamic>> station = [
@@ -74,6 +80,10 @@ final List<GetPage<dynamic>> station = [
     name: "/station-listings",
     page: () => const CreatedListings(),
   ),
+  GetPage(
+    name: "/station-listings",
+    page: () => const CreatedListings(),
+  )
 ];
 
 final List<GetPage<dynamic>> registration = [

@@ -62,8 +62,11 @@ class _LoginState extends State<Login> {
     _passwordController = TextEditingController();
     _passwordFocus = FocusNode();
 
-    _emailController.text = "madridano.kolya@gmail.com";
-    _passwordController.text = "password";
+    // _emailController.text = "madridano.kolya@gmail.com";
+    // _passwordController.text = "password";
+
+    // _emailController.text = "reiss.historia@gmail.com";
+    // _passwordController.text = "password";
   }
 
   @override

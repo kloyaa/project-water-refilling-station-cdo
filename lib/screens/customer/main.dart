@@ -5,6 +5,7 @@ import 'package:app/controllers/globalController.dart';
 import 'package:app/controllers/profileController.dart';
 import 'package:app/controllers/userController.dart';
 import 'package:app/screens/customer/sub/preview_station.dart';
+import 'package:app/screens/ticket/verification.dart';
 import 'package:app/widget/snapshot.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +40,14 @@ class _NearbyWaterRefillingStationsState
   }
 
   void selectStation(data) {
-    _global.selectedStation = data;
-
-    Get.to(() => const PreviewStation());
+    if (_profile.profile["verified"] == true) {
+      _global.selectedStation = data;
+      Get.to(() => const PreviewStation());
+      return;
+    }
+    if (_profile.profile["verified"] == false) {
+      Get.to(() => const Verification());
+    }
   }
 
   @override
@@ -56,7 +62,7 @@ class _NearbyWaterRefillingStationsState
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => true,
+      onWillPop: () async => false,
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: kLight,
@@ -76,7 +82,13 @@ class _NearbyWaterRefillingStationsState
             Container(
               margin: const EdgeInsets.only(right: 15.0),
               child: IconButton(
-                onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+                onPressed: () {
+                  if (_profile.profile["verified"] == false) {
+                    Get.to(() => const Verification());
+                    return;
+                  }
+                  _scaffoldKey.currentState!.openDrawer();
+                },
                 splashRadius: 20.0,
                 icon: const Icon(
                   AntDesign.ellipsis1,

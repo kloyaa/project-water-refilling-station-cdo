@@ -4,4 +4,5 @@ class GlobalController extends GetxController {
   Map registrationProperties = {};
   Map selectedStation = {};
   Map selectedOrder = {};
+  Map selectedCustomerOrder = {};
 }

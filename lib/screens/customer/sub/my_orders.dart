@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:timelines/timelines.dart';
 
 class MyOrders extends StatefulWidget {
@@ -28,9 +29,16 @@ class _MyOrdersState extends State<MyOrders> {
       _orders = _order.getOrders(
         accountId: _profile.profile["accountId"],
         accountType: "customer",
-        status: "pending",
+        status: "not-delivered",
       );
     });
+  }
+
+  Future<void> deleteOrder({id, status}) async {
+    Get.toNamed("/loading");
+    await _order.deleteOrder(id);
+    Get.back();
+    refresh();
   }
 
   @override
@@ -40,7 +48,7 @@ class _MyOrdersState extends State<MyOrders> {
     _orders = _order.getOrders(
       accountId: _profile.profile["accountId"],
       accountType: "customer",
-      status: "pending",
+      status: "not-delivered",
     );
   }
 
@@ -66,10 +74,10 @@ class _MyOrdersState extends State<MyOrders> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () => Get.toNamed("/customer-completed-orders"),
           splashRadius: 20,
           icon: const Icon(
-            FontAwesome.history,
+            MaterialCommunityIcons.truck_check,
             color: Colors.white,
           ),
         ),
@@ -80,7 +88,6 @@ class _MyOrdersState extends State<MyOrders> {
       startConnector: SolidLineConnector(color: kSecondary),
       endConnector: SolidLineConnector(color: kSecondary),
     );
-
     List<TimelineTile> timeline(data) {
       final _timelines = [
         TimelineTile(
@@ -111,13 +118,30 @@ class _MyOrdersState extends State<MyOrders> {
               color: data["status"] == "in-progress" ? kPrimary : Colors.white,
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
-            child: Text(
-              "Order is already in-progress",
-              style: GoogleFonts.roboto(
-                color:
-                    data["status"] == "in-progress" ? Colors.white : kPrimary,
-                fontSize: 12.0,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Order In-Progress",
+                  style: GoogleFonts.roboto(
+                    color: data["status"] == "in-progress"
+                        ? Colors.white
+                        : kPrimary,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "Water Refilling Station is Preparing your Order",
+                  style: GoogleFonts.roboto(
+                    color: data["status"] == "in-progress"
+                        ? Colors.white
+                        : kPrimary,
+                    fontSize: 12.0,
+                  ),
+                ),
+              ],
             ),
           ),
           node: _timelineNode,
@@ -135,7 +159,7 @@ class _MyOrdersState extends State<MyOrders> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Ready",
+                  "Waiting for Delivery",
                   style: GoogleFonts.roboto(
                     color: data["status"] == "ready" ? Colors.white : kPrimary,
                     fontSize: 15.0,
@@ -162,25 +186,44 @@ class _MyOrdersState extends State<MyOrders> {
           ),
           node: _timelineNode,
         ),
-        TimelineTile(
-          nodeAlign: TimelineNodeAlign.start,
-          contents: Container(
-            margin: const EdgeInsets.only(left: 10.0, top: 20.0),
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: data["status"] == "delivered" ? kPrimary : Colors.white,
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            ),
-            child: Text(
-              "Order has been delivered",
-              style: GoogleFonts.roboto(
-                color: data["status"] == "delivered" ? Colors.white : kPrimary,
-                fontSize: 12.0,
-              ),
-            ),
-          ),
-          node: _timelineNode,
-        ),
+        data["status"] == "cancelled"
+            ? TimelineTile(
+                nodeAlign: TimelineNodeAlign.start,
+                contents: Container(
+                  margin: const EdgeInsets.only(left: 10.0, top: 20.0),
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: const BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Order has been declined by the Water Refilling Station",
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        "See reasons why",
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                node: _timelineNode,
+              )
+            : TimelineTile(
+                nodeAlign: TimelineNodeAlign.start,
+                node: const TimelineNode(),
+              )
       ];
       return _timelines;
     }
@@ -203,7 +246,7 @@ class _MyOrdersState extends State<MyOrders> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data.length == 0) {
               return snapshotEmptyMessage(
-                "Sorry, We did not find any nearby\nWater Refilling Stations in your area.",
+                "You have no active orders",
               );
             }
           }
@@ -218,7 +261,7 @@ class _MyOrdersState extends State<MyOrders> {
                 final _total = snapshot.data[index]["content"]["total"];
                 final _deliveryAddress =
                     snapshot.data[index]["header"]["customer"]["address"];
-
+                final _status = snapshot.data[index]["status"];
                 return Container(
                   margin: const EdgeInsets.only(
                     top: 10.0,
@@ -229,6 +272,10 @@ class _MyOrdersState extends State<MyOrders> {
                     onTap: () {},
                     contentPadding: const EdgeInsets.all(20.0),
                     isThreeLine: true,
+                    tileColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: kDefaultRadius,
+                    ),
                     leading: Hero(
                       tag: snapshot.data[index]["_id"],
                       child: CachedNetworkImage(
@@ -248,13 +295,48 @@ class _MyOrdersState extends State<MyOrders> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            snapshot.data[index]["header"]["station"]["name"],
-                            style: GoogleFonts.chivo(
-                              color: kPrimary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 17.0,
-                            ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  snapshot.data[index]["header"]["station"]
+                                      ["name"],
+                                  style: GoogleFonts.chivo(
+                                    color: kPrimary,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 17.0,
+                                  ),
+                                  maxLines: 2,
+                                ),
+                              ),
+                              _status == "pending"
+                                  ? Container(
+                                      margin: const EdgeInsets.only(left: 5.0),
+                                      width: 60,
+                                      child: TextButton(
+                                        onPressed: () async {
+                                          await deleteOrder(
+                                            id: snapshot.data[index]["_id"],
+                                            status: "cancelled",
+                                          );
+                                        },
+                                        style: TextButton.styleFrom(
+                                          splashFactory: NoSplash.splashFactory,
+                                        ),
+                                        child: Text(
+                                          "CANCEL",
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 10.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.redAccent,
+                                            height: -1.2,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ],
                           ),
                           Text(
                             snapshot.data[index]["header"]["station"]
@@ -276,7 +358,7 @@ class _MyOrdersState extends State<MyOrders> {
                             margin: const EdgeInsets.only(top: 10.0),
                             padding: const EdgeInsets.all(15.0),
                             decoration: const BoxDecoration(
-                              color: Colors.white,
+                              color: kLight,
                               borderRadius: kDefaultRadius,
                             ),
                             child: Column(
@@ -322,7 +404,54 @@ class _MyOrdersState extends State<MyOrders> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 22.0,
                                   ),
-                                )
+                                ),
+                                const SizedBox(height: 15),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 40,
+                                  child: TextButton.icon(
+                                    icon: const Icon(
+                                      AntDesign.qrcode,
+                                      color: kLight,
+                                      size: 15,
+                                    ),
+                                    onPressed: () {
+                                      Get.bottomSheet(
+                                        Container(
+                                          padding: const EdgeInsets.all(30.0),
+                                          decoration: const BoxDecoration(
+                                            borderRadius: kDefaultRadius,
+                                            color: kLight,
+                                          ),
+                                          child: Center(
+                                            child: QrImage(
+                                              data: snapshot.data[index]["_id"],
+                                              version: QrVersions.auto,
+                                              size: 200,
+                                              gapless: false,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    style: TextButton.styleFrom(
+                                      //primary: kFadeWhite,
+                                      backgroundColor: kPrimary,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: kDefaultRadius,
+                                      ),
+                                    ),
+                                    label: Text(
+                                      "SHOW QR",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w400,
+                                        color: kLight,
+                                        height: 1.6,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
